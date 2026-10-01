@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OmniDoc - Convertisseur de Documents</title>
+    <script src="https://cloudflare.com"></script>
+    <style>
+        :root {
+            --primary-color: #0284c7;
+            --secondary-color: #0369a1;
+            --background-color: #f8fafc;
+            --card-color: #ffffff;
+            --text-color: #0f172a;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            background-color: #1e293b;
+            color: white;
+            width: 100%;
+            padding: 15px 0;
+            text-align: center;
+            font-size: 1.4rem;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* PUBLICITÉ 1 (HAUT DE PAGE) */
+        .adsterra-top {
+            background-color: #fee2e2;
+            border: 1px dashed #ef4444;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        /* PUBLICITÉ 2 (MILIEU DE PAGE) */
+        .adsterra-middle {
+            background-color: #ffedd5;
+            border: 1px dashed #f97316;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .btn-adsterra-1 {
+            display: inline-block;
+            background-color: #ef4444;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-top: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .btn-adsterra-2 {
+            display: inline-block;
+            background-color: #f97316;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-top: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .card {
+            background: var(--card-color);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            margin-top: 0;
+            font-size: 1.1rem;
+            color: var(--secondary-color);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        input[type="file"], input[type="number"], select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 0.95rem;
+        }
+
+        .range-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        input[type="range"] {
+            flex: 1;
+        }
+
+        button {
+            width: 100%;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 6px -1px rgba(2, 132, 199, 0.3);
+        }
+
+        #previewContainer {
+            margin-top: 15px;
+            text-align: center;
+            display: none;
+        }
+
+        #previewImage {
+            max-width: 100%;
+            max-height: 220px;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .status-message {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: 500;
+            display: none;
+        }
+
+        .success { background-color: #dcfce7; color: #166534; }
+        .error { background-color: #fee2e2; color: #991b1b; }
+    </style>
+</head>
+<body>
+
+    <header>OmniDoc Converter</header>
+
+    <div class="container">
+        
+        <!-- ZONE PUBLICITAIRE 1 -->
+        <div class="adsterra-top">
+            <span style="font-size: 0.85rem; color: #991b1b; font-weight: 500;">Soutenir l'application pour rester gratuit :</span><br>
+            <a href="https://tuxedoarbourannouncement.com" target="_blank" class="btn-adsterra-1">Accéder au Sponsor 1</a>
+        </div>
+
+        <!-- Section 1 : Importation -->
+        <div class="card">
+            <h2>1. Document à Scanner ou Importer</h2>
+            <div class="form-group">
+                <input type="file" id="fileInput" accept="image/*">
+            </div>
+            <div id="previewContainer">
+                <img id="previewImage" src="" alt="Aperçu">
+            </div>
+        </div>
+
+        <!-- Section 2 : Options -->
+        <div class="card">
+            <h2>2. Paramètres & Options</h2>
+            <div class="form-group">
+                <label for="resizeWidth">Largeur max (px) :</label>
+                <input type="number" id="resizeWidth" value="1080">
+            </div>
+            <div class="form-group">
+                <label for="compressionQuality">Qualité :</label>
+                <div class="range-container">
+                    <input type="range" id="compressionQuality" min="10" max="100" value="85">
+                    <span id="qualityValue">85%</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="outputFormat">Format final :</label>
+                <select id="outputFormat">
+                    <option value="pdf">Document PDF (.pdf)</option>
+                    <option value="jpeg">Image JPG (.jpg)</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- ZONE PUBLICITAIRE 2 -->
+        <div class="adsterra-middle">
+            <span style="font-size: 0.85rem; color: #c2410c; font-weight: 500;">Vérification requise pour débloquer les serveurs :</span><br>
+            <a href="https://tuxedoarbourannouncement.com" target="_blank" class="btn-adsterra-2">🔓 Vérifier et Continuer (Sponsor 2)</a>
+        </div>
+
+        <!-- Bouton de conversion principal -->
+        <button id="processBtn">Lancer la Conversion</button>
+        <div id="statusBox" class="status-message"></div>
+
+    </div>
+
+    <script>
+        const fileInput = document.getElementById('fileInput');
+        const previewContainer = document.getElementById('previewContainer');
+        const previewImage = document.getElementById('previewImage');
+        const compressionQuality = document.getElementById('compressionQuality');
+        const qualityValue = document.getElementById('qualityValue');
+        const processBtn = document.getElementById('processBtn');
+        const statusBox = document.getElementById('statusBox');
+
+        let loadedImageSrc = null;
+
+        compressionQuality.addEventListener('input', (e) => {
+            qualityValue.textContent = e.target.value + '%';
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    previewImage.src = event.target.result;
+                    loadedImageSrc = event.target.result;
+                    previewContainer.style.display = 'block';
+                    showStatus('', '');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        processBtn.addEventListener('click', () => {
+            if (!loadedImageSrc) {
+                showStatus('Sélectionnez d\'abord une photo ou un fichier.', 'error');
+                return;
+            }
+
+            showStatus('Génération en cours...', 'success');
+
+            const img = new Image();
+            img.src = loadedImageSrc;
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+
+                const targetWidth = parseInt(document.getElementById('resizeWidth').value) || img.width;
+                const scaleFactor = targetWidth / img.width;
+                const targetHeight = img.height * scaleFactor;
+
+                canvas.width = targetWidth;
+                canvas.height = targetHeight;
+                ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
+
+                const quality = parseInt(compressionQuality.value) / 100;
+                const format = document.getElementById('outputFormat').value;
+                const compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
+
+                if (format === 'jpeg') {
+                    triggerDownload(compressedDataUrl, 'omni_document.jpg');
+                    showStatus('Fichier JPG enregistré avec succès !', 'success');
+                } else if (format === 'pdf') {
+                    const { jsPDF } = window.jspdf;
+                    const pdf = new jsPDF({
+                        orientation: targetWidth > targetHeight ? 'l' : 'p',
+                        unit: 'px',
+                        format: [targetWidth, targetHeight]
+                    });
+  
